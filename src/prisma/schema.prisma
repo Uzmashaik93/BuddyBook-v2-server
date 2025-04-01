@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String
+  email    String @unique
+  password String
+}
+
+model Team {
+  id             String   @id @default(cuid())
+  createdBy      String
+  createdByEmail String
+  teamName       String
+  timestamp      String
+  updatedAt      String
+  members        Member[]
+}
+
+model Member {
+  id             String         @id @default(cuid())
+  age            String
+  comments       Comment[]
+  customAnswers  CustomAnswer[]
+  customQuestion String
+  hobbies        String
+  linkedIn       String
+  name           String
+  place          String
+  question1      String
+  question2      String
+  Team           Team?          @relation(fields: [teamId], references: [id])
+  teamId         String?
+}
+
+model Comment {
+  id       String  @id @default(cuid())
+  comment  String
+  name     String
+  memberId String?
+  Member   Member? @relation(fields: [memberId], references: [id])
+}
+
+model CustomAnswer {
+  id       String  @id @default(cuid())
+  answer   String
+  email    String
+  name     String
+  memberId String?
+  Member   Member? @relation(fields: [memberId], references: [id])
+}
