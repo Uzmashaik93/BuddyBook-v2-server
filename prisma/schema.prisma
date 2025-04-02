@@ -25,7 +25,7 @@ model Team {
   createdBy      String
   createdByEmail String
   teamName       String
-  timestamp      DateTime @default(now())
+  timestamp      String
   members        Member[]
 }
 
