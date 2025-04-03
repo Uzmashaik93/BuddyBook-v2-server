@@ -6,6 +6,7 @@ import authRoutes from "./src/routes/auth.routes";
 import { errorHandling } from "./src/error-handling";
 import teamsRoutes from "./src/routes/team.routes";
 import { isAuthenticated } from "./src/middleware/jwt.middleware";
+import membersRoutes from "./src/routes/member.routes";
 
 dotenv.config();
 
@@ -18,6 +19,9 @@ app.use("/api", indexRoutes);
 app.use("/auth", authRoutes);
 
 app.use("/teams", isAuthenticated, teamsRoutes);
+
+app.use("/members", isAuthenticated, membersRoutes);
+
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 errorHandling(app);

@@ -10,7 +10,13 @@ const router = Router();
 router.get("/", async (req: Request, res: Response) => {
 
     try {
-        const response = await prisma.team.findMany();
+        const response = await prisma.team.findMany(
+            {
+                where: {
+                    createdByEmail: req.user?.email
+                }
+            }
+        );
         if (!response || response.length === 0) {
             res.status(404).json({ message: "No teams found" });
             return;
@@ -73,7 +79,7 @@ router.get("/:teamId", async (req: Request, res: Response) => {
 })
 
 // PUT /api/teams/:id -  Updates a team by id
-router.patch("/:teamId", async (req: Request, res: Response) => {
+router.put("/:teamId", async (req: Request, res: Response) => {
     const { teamId } = req.params;
     try {
         const { teamName, createdBy, createdByEmail, timestamp } = req.body;
