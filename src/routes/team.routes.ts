@@ -14,6 +14,9 @@ router.get("/", async (req: Request, res: Response) => {
             {
                 where: {
                     createdByEmail: req.user?.email
+                },
+                include: {
+                    members: true
                 }
             }
         );
