@@ -9,6 +9,8 @@ declare module 'express-serve-static-core' {
 }
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+  console.log("Token");
+
   const token = req.headers.authorization?.split(' ')[1]; // Get the token from the Authorization header
 
   if (!token) {
