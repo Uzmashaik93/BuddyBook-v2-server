@@ -7,6 +7,8 @@ import { errorHandling } from "./src/error-handling";
 import teamsRoutes from "./src/routes/team.routes";
 import { isAuthenticated } from "./src/middleware/jwt.middleware";
 import teamRoute from "./src/routes/member.routes";
+import commentsRoutes from "./src/routes/comments.routes";
+import customAnswersRoutes from "./src/routes/customAnswers.routes";
 
 dotenv.config();
 
@@ -21,6 +23,12 @@ app.use("/auth", authRoutes);
 app.use("/teams", isAuthenticated, teamsRoutes);
 
 app.use("/team", isAuthenticated, teamRoute);
+
+app.use("/comments", isAuthenticated, commentsRoutes);
+
+app.use("/custom", isAuthenticated, customAnswersRoutes);
+
+
 
 
 
