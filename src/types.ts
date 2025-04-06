@@ -1,6 +1,6 @@
 // types.ts or auth.types.ts
 export interface JwtPayload {
-    userId: string;
+    id: string;
     email: string;
     username: string;
 }

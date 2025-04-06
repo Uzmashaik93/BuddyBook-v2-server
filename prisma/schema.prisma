@@ -14,19 +14,36 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String   @id @default(uuid())
   username String
-  email    String @unique
+  email    String   @unique
   password String
+  Team     Team[]
+  Member   Member[]
 }
 
 model Team {
-  id             String   @id @default(cuid())
-  createdBy      String
-  createdByEmail String
-  teamName       String
-  timestamp      String
-  members        Member[]
+  id        String       @id @default(cuid())
+  createdBy User         @relation(fields: [userId], references: [id])
+  teamName  String
+  timestamp String
+  members   Member[]
+  userId    String
+  invites   TeamInvite[]
+}
+
+model TeamInvite {
+  id               String       @id @default(uuid())
+  teamId           String
+  invitedUserEmail String
+  status           InviteStatus @default(PENDING)
+  team             Team         @relation(fields: [teamId], references: [id])
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }
 
 model Member {
@@ -43,6 +60,8 @@ model Member {
   question2      String
   Team           Team?          @relation(fields: [teamId], references: [id])
   teamId         String?
+  userProfile    User           @relation(fields: [userId], references: [id])
+  userId         String
 }
 
 model Comment {

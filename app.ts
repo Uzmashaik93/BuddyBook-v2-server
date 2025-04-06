@@ -6,7 +6,7 @@ import authRoutes from "./src/routes/auth.routes";
 import { errorHandling } from "./src/error-handling";
 import teamsRoutes from "./src/routes/team.routes";
 import { isAuthenticated } from "./src/middleware/jwt.middleware";
-import teamRoute from "./src/routes/member.routes";
+import memberRoutes from "./src/routes/member.routes";
 import commentsRoutes from "./src/routes/comments.routes";
 import customAnswersRoutes from "./src/routes/customAnswers.routes";
 
@@ -22,7 +22,7 @@ app.use("/auth", authRoutes);
 
 app.use("/teams", isAuthenticated, teamsRoutes);
 
-app.use("/team", isAuthenticated, teamRoute);
+app.use("/team", isAuthenticated, memberRoutes);
 
 app.use("/comments", isAuthenticated, commentsRoutes);
 

@@ -12,8 +12,19 @@ router.get("/:teamId", async (req: Request, res: Response, next: NextFunction) =
     try {
         const response = await prisma.member.findMany({
             where: {
-                teamId: teamId
+                teamId: teamId,
+
+            }, include: {
+                userProfile: {
+                    select: {
+                        id: true,
+                        email: true,
+                        username: true,
+
+                    }
+                },
             }
+
         });
         if (!response || response.length === 0) {
             res.status(404).json({ message: "No members found" });
@@ -52,7 +63,8 @@ router.post("/:teamId/member", async (req: Request, res: Response, next: NextFun
                 place,
                 question1,
                 question2,
-                teamId
+                teamId,
+                userId: req.user?.id,
             }
         });
         res.status(201).json({ message: "Member created", member: response })

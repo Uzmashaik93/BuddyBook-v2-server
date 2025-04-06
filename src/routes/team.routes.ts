@@ -13,18 +13,23 @@ router.get("/", async (req: Request, res: Response) => {
         const response = await prisma.team.findMany(
             {
                 where: {
-                    createdByEmail: req.user?.email
+                    userId: req.user?.id
                 },
                 include: {
-                    members: true
+                    members: true,
+                    createdBy: {
+                        select: {
+                            id: true,
+                            email: true,
+                            username: true
+                        }
+                    },
+                    invites: true
                 }
             }
         );
-        if (!response || response.length === 0) {
-            res.status(404).json({ message: "No teams found" });
-            return;
-        }
-        res.status(200).json({ message: "Teams fetched successfully", teams: response });
+
+        res.status(200).json({ message: "Teams fetched successfully", teams: response ?? [] });
     }
     catch (error) {
         console.log(error);
@@ -41,9 +46,9 @@ router.post("/", async (req: Request, res: Response) => {
         const response = await prisma.team.create({
             data: {
                 teamName,
-                createdBy,
-                createdByEmail: req.user?.email || "unknown",
+                userId: req.user?.id,
                 timestamp: new Date().toISOString(),
+
             }
         })
         res.status(201).json({ message: "Team created successfully", team: response });
@@ -55,6 +60,28 @@ router.post("/", async (req: Request, res: Response) => {
     }
 }
 )
+
+router.post("/invite/:teamId", async (req: Request, res: Response) => {
+    const { teamId } = req.params;
+    const { inviteEmail } = req.body;
+
+    try {
+
+        await prisma.teamInvite.create({
+            data: {
+                teamId,
+                invitedUserEmail: inviteEmail,
+                status: "PENDING",
+            },
+        })
+
+        res.status(201).json({});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+})
 
 // GET /api/teams/:id -  Retrieves a team by id
 router.get("/:teamId", async (req: Request, res: Response) => {
@@ -85,19 +112,29 @@ router.get("/:teamId", async (req: Request, res: Response) => {
 router.put("/:teamId", async (req: Request, res: Response) => {
     const { teamId } = req.params;
     try {
-        const { teamName, createdBy, createdByEmail, timestamp } = req.body;
-        const response = await prisma.team.update({
+        const { teamName } = req.body;
+
+        const teamExists = await prisma.team.findUnique({
             where: {
-                id: teamId
-            },
-            data: {
-                teamName,
-                createdBy,
-                createdByEmail,
-                timestamp
+                id: teamId,
+                userId: req.user?.id
             }
         });
-        res.status(200).json({ message: "Team updated successfully", team: response });
+
+        if (teamExists) {
+
+            const response = await prisma.team.update({
+                where: {
+                    id: teamId
+                },
+                data: {
+                    teamName,
+                }
+            });
+            res.status(200).json({ message: "Team updated successfully", team: response });
+        } else {
+            res.status(404).json({ message: "Team not found" });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
