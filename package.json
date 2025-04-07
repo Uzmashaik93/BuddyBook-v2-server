@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server.ts",
     "dev": "nodemon src/server.ts",
-    "server": "nodemon dist/server.js"
+    "server": "nodemon dist/server.js",
+    "build": "tsc"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
