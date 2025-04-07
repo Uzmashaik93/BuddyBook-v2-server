@@ -1,5 +1,5 @@
 import express from "express";
-import { Request, Response, Router } from "express";
+import { Request, Response, Router, NextFunction } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { timeStamp } from "console";
 const prisma = new PrismaClient();
@@ -67,7 +67,21 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
 
     try {
 
-        await prisma.teamInvite.create({
+        // Check if the team exists
+        const existingInvite = await prisma.teamInvite.findFirst({
+            where: {
+                teamId,
+                invitedUserEmail: inviteEmail,
+            },
+        });
+
+        if (existingInvite) {
+            res.status(400).json({ message: "User is already invited to this team" });
+            return;
+        }
+
+
+        const response = await prisma.teamInvite.create({
             data: {
                 teamId,
                 invitedUserEmail: inviteEmail,
@@ -75,13 +89,15 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
             },
         })
 
-        res.status(201).json({});
+        res.status(201).json({ "Response": response, message: "Team invite created successfully" });
     }
     catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
 })
+
+
 
 // GET /api/teams/:id -  Retrieves a team by id
 router.get("/:teamId", async (req: Request, res: Response) => {

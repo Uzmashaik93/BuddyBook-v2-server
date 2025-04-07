@@ -9,6 +9,7 @@ import { isAuthenticated } from "./src/middleware/jwt.middleware";
 import memberRoutes from "./src/routes/member.routes";
 import commentsRoutes from "./src/routes/comments.routes";
 import customAnswersRoutes from "./src/routes/customAnswers.routes";
+import invitesRoutes from "./src/routes/invites.routes";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/comments", isAuthenticated, commentsRoutes);
 
 app.use("/custom", isAuthenticated, customAnswersRoutes);
 
+app.use("/invites", isAuthenticated, invitesRoutes);
 
 
 
