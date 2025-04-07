@@ -1,6 +1,6 @@
 import express from "express";
 import { Request, Response, Router, NextFunction } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, Team } from "@prisma/client";
 import { timeStamp } from "console";
 const prisma = new PrismaClient();
 const router = Router();
@@ -13,7 +13,8 @@ router.get("/", async (req: Request, res: Response) => {
         const response = await prisma.team.findMany(
             {
                 where: {
-                    userId: req.user?.id
+                    userId: req.user?.id,
+
                 },
                 include: {
                     members: true,
@@ -27,9 +28,51 @@ router.get("/", async (req: Request, res: Response) => {
                     invites: true
                 }
             }
-        );
+        ) ?? []
+        console.log("response", response);
 
-        res.status(200).json({ message: "Teams fetched successfully", teams: response ?? [] });
+        const memberList = await prisma.member.findMany(
+            {
+                where: {
+                    userId: req.user.id
+
+                },
+                include: {
+                    Team: {
+                        include: {
+                            createdBy: {
+                                select: {
+                                    id: true,
+                                    email: true,
+                                    username: true
+                                }
+                            },
+                            members: true,
+                            invites: true
+
+                        }
+                    },
+
+                }
+            }
+        ) ?? []
+
+        const teamsUserIsMemberOf = memberList.reduce((acc: Team[], value): Team[] => {
+
+            if (!value.Team) {
+                return acc;
+            }
+
+            const teamValue = response.find(x => x.id === value.teamId);
+
+            return teamValue === undefined ? [...acc, value.Team] : acc
+        }, [])
+
+        console.log("teamsUserIsMemberOf", teamsUserIsMemberOf)
+
+        const teams = [...response, ...teamsUserIsMemberOf];
+
+        res.status(200).json({ message: "Teams fetched successfully", teams: teams });
     }
     catch (error) {
         console.log(error);

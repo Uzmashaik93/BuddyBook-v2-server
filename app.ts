@@ -4,7 +4,7 @@ import { config } from "./config/index";
 import indexRoutes from "./src/routes/index.routes";
 import authRoutes from "./src/routes/auth.routes";
 import { errorHandling } from "./src/error-handling";
-import teamsRoutes from "./src/routes/team.routes";
+import teamsRoutes from "./src/routes/teams.routes";
 import { isAuthenticated } from "./src/middleware/jwt.middleware";
 import memberRoutes from "./src/routes/member.routes";
 import commentsRoutes from "./src/routes/comments.routes";
