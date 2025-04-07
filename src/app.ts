@@ -1,15 +1,15 @@
 import dotenv from "dotenv";
 import express from "express";
 import { config } from "./config/index";
-import indexRoutes from "./src/routes/index.routes";
-import authRoutes from "./src/routes/auth.routes";
-import { errorHandling } from "./src/error-handling";
-import teamsRoutes from "./src/routes/teams.routes";
-import { isAuthenticated } from "./src/middleware/jwt.middleware";
-import memberRoutes from "./src/routes/member.routes";
-import commentsRoutes from "./src/routes/comments.routes";
-import customAnswersRoutes from "./src/routes/customAnswers.routes";
-import invitesRoutes from "./src/routes/invites.routes";
+import indexRoutes from "./routes/index.routes";
+import authRoutes from "./routes/auth.routes";
+import { errorHandling } from "./error-handling";
+import teamsRoutes from "./routes/teams.routes";
+import { isAuthenticated } from "./middleware/jwt.middleware";
+import memberRoutes from "./routes/member.routes";
+import commentsRoutes from "./routes/comments.routes";
+import customAnswersRoutes from "./routes/customAnswers.routes";
+import invitesRoutes from "./routes/invites.routes";
 
 dotenv.config();
 
