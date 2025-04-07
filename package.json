@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server.ts",
     "dev": "nodemon src/server.ts",
-    "server": "nodemon dist/server.js",
+    "server": "node dist/server.js",
     "build": "tsc"
   },
   "dependencies": {
