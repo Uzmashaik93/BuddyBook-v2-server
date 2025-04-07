@@ -62,6 +62,7 @@ model Member {
   teamId         String?
   userProfile    User           @relation(fields: [userId], references: [id])
   userId         String
+  imageUrl       String
 }
 
 model Comment {

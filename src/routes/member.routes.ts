@@ -51,6 +51,7 @@ router.post("/:teamId/member", async (req: Request, res: Response, next: NextFun
             place,
             question1,
             question2,
+            imageUrl
 
         } = req.body;
         const response = await prisma.member.create({
@@ -65,6 +66,7 @@ router.post("/:teamId/member", async (req: Request, res: Response, next: NextFun
                 question2,
                 teamId,
                 userId: req.user?.id,
+                imageUrl
             }
         });
         res.status(201).json({ message: "Member created", member: response })
