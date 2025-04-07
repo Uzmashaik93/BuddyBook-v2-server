@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.ts",
     "dev": "nodemon src/server.ts",
-    "server": "node dist/server.js",
+    "start": "node dist/server.js",
     "build": "tsc"
   },
   "dependencies": {
