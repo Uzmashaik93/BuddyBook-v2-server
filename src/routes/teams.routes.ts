@@ -2,6 +2,7 @@ import express from "express";
 import { Request, Response, Router, NextFunction } from "express";
 import { Prisma, PrismaClient, Team } from "@prisma/client";
 import { timeStamp } from "console";
+import { sendInvite } from "../utils/mailer";
 const prisma = new PrismaClient();
 const router = Router();
 
@@ -132,6 +133,13 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
             },
         })
 
+        const teamDetails = await prisma.team.findUnique({
+            where: {
+                id: teamId
+            }
+        });
+
+        await sendInvite(inviteEmail, teamDetails?.teamName ?? "");
         res.status(201).json({ "Response": response, message: "Team invite created successfully" });
     }
     catch (error) {
