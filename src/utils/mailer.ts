@@ -17,7 +17,6 @@ export async function sendInvite(email: string, teamName: string) {
       `,
         });
     } catch (error) {
-        console.error('Failed to send invite:', error);
         throw error;
     }
 }

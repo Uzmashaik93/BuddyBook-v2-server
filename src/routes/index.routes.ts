@@ -18,7 +18,6 @@ router.get('/health', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Prisma DB ping failed:', error);
 
     res.status(500).json({
       status: 'error',

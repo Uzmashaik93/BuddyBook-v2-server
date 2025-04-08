@@ -30,7 +30,6 @@ router.get("/", async (req: Request, res: Response) => {
                 }
             }
         ) ?? []
-        console.log("response", response);
 
         const memberList = await prisma.member.findMany(
             {
@@ -69,14 +68,12 @@ router.get("/", async (req: Request, res: Response) => {
             return teamValue === undefined ? [...acc, value.Team] : acc
         }, [])
 
-        console.log("teamsUserIsMemberOf", teamsUserIsMemberOf)
 
         const teams = [...response, ...teamsUserIsMemberOf];
 
         res.status(200).json({ message: "Teams fetched successfully", teams: teams });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
 
@@ -99,7 +96,6 @@ router.post("/", async (req: Request, res: Response) => {
         res.json(response);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -107,7 +103,7 @@ router.post("/", async (req: Request, res: Response) => {
 
 router.post("/invite/:teamId", async (req: Request, res: Response) => {
     const { teamId } = req.params;
-    const { inviteEmail } = req.body;
+    const { invitedUserEmail } = req.body;
 
     try {
 
@@ -115,7 +111,7 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
         const existingInvite = await prisma.teamInvite.findFirst({
             where: {
                 teamId,
-                invitedUserEmail: inviteEmail,
+                invitedUserEmail,
             },
         });
 
@@ -128,7 +124,7 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
         const response = await prisma.teamInvite.create({
             data: {
                 teamId,
-                invitedUserEmail: inviteEmail,
+                invitedUserEmail,
                 status: "PENDING",
             },
         })
@@ -139,11 +135,10 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
             }
         });
 
-        await sendInvite(inviteEmail, teamDetails?.teamName ?? "");
+        await sendInvite(invitedUserEmail, teamDetails?.teamName ?? "");
         res.status(201).json({ "Response": response, message: "Team invite created successfully" });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
 })
@@ -169,7 +164,6 @@ router.get("/:teamId", async (req: Request, res: Response) => {
         }
 
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
 
@@ -203,7 +197,6 @@ router.put("/:teamId", async (req: Request, res: Response) => {
             res.status(404).json({ message: "Team not found" });
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
 })
@@ -219,7 +212,6 @@ router.delete("/:teamId", async (req: Request, res: Response) => {
         });
         res.status(200).json({ message: `Team with id ${teamId} deleted successfully`, team: response });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
 })

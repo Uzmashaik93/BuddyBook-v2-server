@@ -20,7 +20,6 @@ router.get("/:memberId", async (req: Request, res: Response, next: NextFunction)
         res.status(200).json({ message: "Comments fetched successfully", comments: response });
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -41,7 +40,6 @@ router.post("/member/:memberId", async (req: Request, res: Response, next: NextF
         res.status(201).json({ message: "Comment created", comment: response })
 
     } catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -61,7 +59,6 @@ router.delete("/:commentId", async (req: Request, res: Response, next: NextFunct
         res.status(200).json({ message: "Comment deleted successfully", comment: response });
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -84,7 +81,6 @@ router.put("/:commentId", async (req: Request, res: Response, next: NextFunction
         res.status(200).json({ message: "Comment updated successfully", comment: response });
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -104,7 +100,6 @@ router.get("/:commentId", async (req: Request, res: Response, next: NextFunction
         res.status(200).json({ message: "Comment fetched successfully", comment: response })
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })

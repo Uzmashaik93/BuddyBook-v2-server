@@ -33,7 +33,6 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         res.status(200).json({ message: "Invites fetched successfully", invites: response || [] });
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -56,7 +55,6 @@ router.put("/:inviteId", async (req: Request, res: Response, next: NextFunction)
         res.status(200).json({ message: "Invite updated successfully", invite: response });
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })

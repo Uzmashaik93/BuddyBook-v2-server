@@ -1,24 +1,27 @@
 "use strict";
-const { expressjwt: jwt } = require("express-jwt");
-// Instantiate the JWT token validation middleware
-const isAuthenticated = jwt({
-    secret: process.env.TOKEN_SECRET,
-    algorithms: ["HS256"],
-    requestProperty: "payload",
-    getToken: getTokenFromHeaders,
-});
-// Function used to extract the JWT token from the request's 'Authorization' Headers
-function getTokenFromHeaders(req) {
-    // Check if the token is available on the request Headers
-    if (req.headers.authorization &&
-        req.headers.authorization.split(" ")[0] === "Bearer") {
-        // Get the encoded token string and return it
-        const token = req.headers.authorization.split(" ")[1];
-        return token;
-    }
-    return null;
-}
-// Export the middleware so that we can use it to create protected routes
-module.exports = {
-    isAuthenticated,
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isAuthenticated = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const isAuthenticated = (req, res, next) => {
+    var _a;
+    console.log("Token");
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1]; // Get the token from the Authorization header
+    if (!token) {
+        res.status(401).json({ message: 'No token provided' });
+        return;
+    }
+    try {
+        // Decode the JWT using the type
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET || 'your-secret-key');
+        req.user = decoded; // Add the decoded user to the request object
+        next();
+    }
+    catch (error) {
+        res.status(401).json({ message: 'Invalid or expired token' });
+        return;
+    }
+};
+exports.isAuthenticated = isAuthenticated;

@@ -7,7 +7,6 @@ const router = Router();
 
 router.get("/:teamId", async (req: Request, res: Response, next: NextFunction) => {
     const { teamId } = req.params;
-    console.log("teamId", teamId);
 
     try {
         const response = await prisma.member.findMany({
@@ -34,7 +33,6 @@ router.get("/:teamId", async (req: Request, res: Response, next: NextFunction) =
 
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -73,7 +71,6 @@ router.post("/:teamId/member", async (req: Request, res: Response, next: NextFun
 
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 
@@ -83,8 +80,6 @@ router.post("/:teamId/member", async (req: Request, res: Response, next: NextFun
 
 router.get("/:teamId/member/:memberId", async (req: Request, res: Response, next: NextFunction) => {
     const { teamId, memberId } = req.params;
-    console.log("teamId", teamId);
-    console.log("memberId", memberId);
     try {
         const response = await prisma.member.findUnique({
             where: {
@@ -102,15 +97,13 @@ router.get("/:teamId/member/:memberId", async (req: Request, res: Response, next
         res.status(200).json({ message: "Member fetched successfully", member: response })
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
 
 router.put("/:teamId/member/:memberId", async (req: Request, res: Response, next: NextFunction) => {
     const { teamId, memberId } = req.params;
-    console.log("teamId", teamId);
-    console.log("memberId", memberId);
+
     try {
         const { age,
             customQuestion,
@@ -140,15 +133,13 @@ router.put("/:teamId/member/:memberId", async (req: Request, res: Response, next
         res.status(200).json({ message: "Member updated", member: response })
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
 
 router.delete("/:teamId/member/:memberId", async (req: Request, res: Response, next: NextFunction) => {
     const { teamId, memberId } = req.params;
-    console.log("teamId", teamId);
-    console.log("memberId", memberId);
+
     try {
         const response = await prisma.member.delete({
             where: {
@@ -158,7 +149,6 @@ router.delete("/:teamId/member/:memberId", async (req: Request, res: Response, n
         res.status(200).json({ message: "Member deleted", member: response })
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })

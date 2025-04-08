@@ -97,7 +97,6 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
 
 // ✅ GET /auth/verify - Verifies JWT
 router.get("/verify", isAuthenticated, (req: Request, res: Response, next: NextFunction) => {
-  console.log(`req.payload`, req.user);
   res.status(200).json(req.user);
 });
 

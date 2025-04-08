@@ -8,41 +8,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-// Require necessary (isAuthenticated) middleware in order to control access to specific routes
+const express_1 = require("express");
 const jwt_middleware_1 = require("../middleware/jwt.middleware");
-// How many rounds should bcrypt run the salt (default - 10 rounds)
+const client_1 = require("@prisma/client");
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const router = (0, express_1.Router)();
+const prisma = new client_1.PrismaClient();
 const saltRounds = 10;
 // ✅ POST /auth/signup - Creates a new user
 router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, username } = req.body;
         if (!email || !password || !username) {
-            return res
+            res
                 .status(400)
                 .json({ message: "Provide email, password, and name." });
+            return;
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
         if (!emailRegex.test(email)) {
-            return res
+            res
                 .status(400)
                 .json({ message: "Provide a valid email address." });
+            return;
         }
         const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
         if (!passwordRegex.test(password)) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: "Password must be at least 6 characters long and contain at least one number, one lowercase and one uppercase letter.",
             });
+            return;
         }
         const foundUser = yield prisma.user.findUnique({ where: { email } });
         if (foundUser) {
-            return res.status(400).json({ message: "User already exists." });
+            res.status(400).json({ message: "User already exists." });
+            return;
         }
-        const hashedPassword = yield bcrypt.hash(password, saltRounds);
+        const hashedPassword = yield bcrypt_1.default.hash(password, saltRounds);
         const newUser = yield prisma.user.create({
             data: { email, password: hashedPassword, username },
         });
@@ -58,19 +65,22 @@ router.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, func
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(400).json({ message: "Provide email and password." });
+            res.status(400).json({ message: "Provide email and password." });
+            return;
         }
         const foundUser = yield prisma.user.findUnique({ where: { email } });
         if (!foundUser) {
-            return res.status(401).json({ message: "User not found." });
+            res.status(401).json({ message: "User not found." });
+            return;
         }
-        const passwordCorrect = yield bcrypt.compare(password, foundUser.password);
+        const passwordCorrect = yield bcrypt_1.default.compare(password, foundUser.password);
         if (!passwordCorrect) {
-            return res.status(401).json({ message: "Invalid credentials." });
+            res.status(401).json({ message: "Invalid credentials." });
+            return;
         }
         const { id, username } = foundUser;
         const payload = { id, email, username };
-        const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        const authToken = jsonwebtoken_1.default.sign(payload, process.env.TOKEN_SECRET || "", {
             algorithm: "HS256",
             expiresIn: "6h",
         });
@@ -82,7 +92,7 @@ router.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, func
 }));
 // ✅ GET /auth/verify - Verifies JWT
 router.get("/verify", jwt_middleware_1.isAuthenticated, (req, res, next) => {
-    console.log(`req.payload`, req.payload);
-    res.status(200).json(req.payload);
+    console.log(`req.payload`, req.user);
+    res.status(200).json(req.user);
 });
-module.exports = router;
+exports.default = router;

@@ -1,5 +1,7 @@
 "use strict";
-module.exports = (app) => {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.errorHandling = errorHandling;
+function errorHandling(app) {
     app.use((req, res, next) => {
         // this middleware runs whenever requested page is not available
         res.status(404).json({ message: "This route does not exist" });
@@ -15,4 +17,5 @@ module.exports = (app) => {
             });
         }
     });
-};
+}
+;

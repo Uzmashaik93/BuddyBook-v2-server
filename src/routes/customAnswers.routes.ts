@@ -20,7 +20,6 @@ router.get("/:memberId", async (req: Request, res: Response, next: NextFunction)
         res.status(200).json({ message: "Custom answers fetched successfully", customAnswers: response });
     }
     catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -42,7 +41,6 @@ router.post("/member/:memberId", async (req: Request, res: Response, next: NextF
         res.status(201).json({ message: "Custom answer created", customAnswer: response })
 
     } catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 })
@@ -61,7 +59,6 @@ router.delete("/:customAnswerId", async (req: Request, res: Response, next: Next
         }
         res.status(200).json({ message: "Custom answer deleted successfully", customAnswer: response });
     } catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 }
@@ -85,7 +82,6 @@ router.put("/:customAnswerId", async (req: Request, res: Response, next: NextFun
         }
         res.status(200).json({ message: "Custom answer updated successfully", customAnswer: response });
     } catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 }
@@ -105,7 +101,6 @@ router.get("/:customAnswerId", async (req: Request, res: Response, next: NextFun
         }
         res.status(200).json({ message: "Custom answer fetched successfully", customAnswer: response });
     } catch (error) {
-        console.log("Error", error);
         res.status(500).json(error)
     }
 }
