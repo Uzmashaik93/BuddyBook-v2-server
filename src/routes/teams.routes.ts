@@ -96,6 +96,8 @@ router.post("/", async (req: Request, res: Response) => {
         res.json(response);
     }
     catch (error) {
+        console.log(error);
+
         res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -139,6 +141,7 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
         res.status(201).json({ "Response": response, message: "Team invite created successfully" });
     }
     catch (error) {
+
         res.status(500).json({ message: "Internal server error" });
     }
 })
@@ -210,6 +213,8 @@ router.delete("/:teamId", async (req: Request, res: Response) => {
         });
         res.status(200).json({ message: `Team with id ${teamId} deleted successfully`, team: response });
     } catch (error) {
+        console.error(error);
+
         res.status(500).json({ message: "Internal server error" });
     }
 })
