@@ -10,6 +10,7 @@ import memberRoutes from "./routes/member.routes";
 import commentsRoutes from "./routes/comments.routes";
 import customAnswersRoutes from "./routes/customAnswers.routes";
 import invitesRoutes from "./routes/invites.routes";
+import reactionsRoutes from "./routes/reactions.routes";
 
 dotenv.config();
 
@@ -30,6 +31,9 @@ app.use("/comments", isAuthenticated, commentsRoutes);
 app.use("/custom", isAuthenticated, customAnswersRoutes);
 
 app.use("/invites", isAuthenticated, invitesRoutes);
+
+app.use("/reactions", isAuthenticated, reactionsRoutes);
+
 
 
 

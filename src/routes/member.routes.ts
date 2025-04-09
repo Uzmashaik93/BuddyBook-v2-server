@@ -22,6 +22,7 @@ router.get("/:teamId", async (req: Request, res: Response, next: NextFunction) =
 
                     }
                 },
+                reactions: true
             }
 
         });
