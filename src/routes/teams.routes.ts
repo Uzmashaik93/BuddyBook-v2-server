@@ -143,8 +143,6 @@ router.post("/invite/:teamId", async (req: Request, res: Response) => {
     }
 })
 
-
-
 // GET /api/teams/:id -  Retrieves a team by id
 router.get("/:teamId", async (req: Request, res: Response) => {
     const { teamId } = req.params;
