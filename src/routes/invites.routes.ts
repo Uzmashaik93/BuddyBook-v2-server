@@ -37,6 +37,37 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 })
 
+router.get("/:teamId", async (req: Request, res: Response, next: NextFunction) => {
+    const { teamId } = req.params;
+    try {
+        const response = await prisma.teamInvite.findMany({
+            where: {
+                teamId
+            },
+            include: {
+                team: {
+                    select: {
+                        id: true,
+                        teamName: true,
+                        userId: true,
+                        createdBy: {
+                            select: {
+                                id: true,
+                                email: true,
+                                username: true
+                            }
+                        },
+                    }
+                },
+            }
+        });
+
+        res.status(200).json({ message: "Invites fetched successfully", invites: response || [] });
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
+})
 
 router.put("/:inviteId", async (req: Request, res: Response, next: NextFunction) => {
     const { inviteId } = req.params;
