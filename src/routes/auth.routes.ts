@@ -91,6 +91,7 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
 
     res.status(200).json({ authToken });
   } catch (error) {
+
     next(error);
   }
 });

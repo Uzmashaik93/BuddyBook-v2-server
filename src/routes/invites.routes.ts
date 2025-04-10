@@ -37,6 +37,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 })
 
+
 router.put("/:inviteId", async (req: Request, res: Response, next: NextFunction) => {
     const { inviteId } = req.params;
     try {

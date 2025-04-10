@@ -156,6 +156,7 @@ router.get("/:teamId", async (req: Request, res: Response) => {
                 id: teamId
             }
         });
+
         if (!response) {
             res.status(404).json({ message: "Team not found" });
             return;
@@ -205,12 +206,15 @@ router.put("/:teamId", async (req: Request, res: Response) => {
 // DELETE /api/teams/:id -  Deletes a team by id
 router.delete("/:teamId", async (req: Request, res: Response) => {
     const { teamId } = req.params;
+
+
     try {
         const response = await prisma.team.delete({
             where: {
                 id: teamId
             }
         });
+
         res.status(200).json({ message: `Team with id ${teamId} deleted successfully`, team: response });
     } catch (error) {
         console.error(error);
