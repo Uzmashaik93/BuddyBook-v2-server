@@ -14,7 +14,7 @@ This project is inspired by a previous React app that my teammate Julia and I bu
 - **User Profiles:** Add and update user profiles.
 - **Email Invitations:** Send email invitations to friends to join teams.
 - **Authentication:** JWT.
-- **Database Integration:** Interacts with a PostgreSQL database for storing team and user information.
+- **Database Integration:** Interacts with a PostgreSQL database to store team and user information.
 
 ## Tech Stack
 
@@ -33,5 +33,5 @@ This project is inspired by a previous React app that my teammate Julia and I bu
 2️⃣ Prisma deployment on Supabase. 
 
 ## 📜 License
-This project is built and maintained by BuddyBook-V2 contributors. All rights belong to the individuals who contributed to its development.
+This project is built and maintained by BuddyBook-V2 contributors. The individuals who contributed to its development own all rights.
 
